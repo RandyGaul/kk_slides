@@ -1,7 +1,9 @@
 Why care about coroutines?
 @pause
 
-This *entire* program was written in 250 LOC.
+This *entire* program was written in 275 LOC.
+@pause
+>> https://github.com/RandyGaul/kk_slides
 @pause
 
 This includes:

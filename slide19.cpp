@@ -10,3 +10,6 @@ Some Further Readings
   https://eli.thegreenplace.net/2009/08/29/co-routines-as-an-alternative-to-state-machines/
 * Implementing Cutscenes with Coroutines
   https://eliasdaler.github.io/how-to-implement-action-sequences-and-cutscenes/
+* Strong implementation in C, very similar to my own cute_coroutine.h,
+  written by a friend of mine
+  http://kihlander.net/protothreads-with-a-twist.html

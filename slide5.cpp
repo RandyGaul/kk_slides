@@ -69,7 +69,6 @@ void update_grass_enemy(GrassEnemy* ge, float dt)
 }
 @pause
 @clear
-
 Basically a huge amount of work for one enemy.
 @pause
 .

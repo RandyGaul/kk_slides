@@ -34,6 +34,9 @@
 
 static std::string s_buffer;
 static std::string s_command;
+static int slide_reset;
+static coroutine_t s_flush_co;
+static coroutine_t s_parse_co;
 
 void clear()
 {
@@ -47,7 +50,11 @@ void pause(bool show_message = true)
 		printf("\033[36m\nPress any key to continue...\033[0m");
 	}
 	int c = getch();
-	if (c == 0 || c == 0xE0) _getch();
+	if (c == 0 || c == 0xE0) c = _getch();
+	if (c == 75) {
+		slide_reset = 1;
+		return;
+	}
 	if (show_message) {
 		printf("\n\n");
 	}
@@ -141,7 +148,6 @@ void parse(coroutine_t* co, char c)
 void print(coroutine_t* co, float dt, int char_frequency, const char* string)
 {
 	static int index;
-	static coroutine_t parse_co;
 	static char c;
 	int milliseconds = rand() % 5 + char_frequency;
 
@@ -150,7 +156,7 @@ void print(coroutine_t* co, float dt, int char_frequency, const char* string)
 
 	COROUTINE_CASE(co, print_char);
 	c = string[index++];
-	COROUTINE_CALL(co, parse(&parse_co, c));
+	COROUTINE_CALL(co, parse(&s_parse_co, c));
 	COROUTINE_WAIT(co, milliseconds, dt);
 	if (c) goto print_char;
 
@@ -159,8 +165,7 @@ void print(coroutine_t* co, float dt, int char_frequency, const char* string)
 
 int flush_slide(float dt, int frequency_milliseconds, const char* string)
 {
-	static coroutine_t s_co;
-	coroutine_t* co = &s_co;
+	coroutine_t* co = &s_flush_co;
 	int keep_going = 1;
 	int ms = frequency_milliseconds;
 
@@ -199,10 +204,12 @@ int do_slides()
 {
 	static coroutine_t s_co;
 	coroutine_t* co = &s_co;
-	static int slide_index = 0;
 	static char slide_path[256];
+	static int slide_index = 18;
 	static const char* buffer;
 	int keep_going = 1;
+
+	reset_slide_label:
 
 	COROUTINE_START(co);
 
@@ -224,6 +231,16 @@ int do_slides()
 		#else
 			usleep(1000);
 		#endif
+
+		if (slide_reset) {
+			clear();
+			coroutine_init(co);
+			coroutine_init(&s_flush_co);
+			coroutine_init(&s_parse_co);
+			--slide_index;
+			slide_reset = 0;
+			goto reset_slide_label;
+		}
 	}
 	pause();
 	clear();
