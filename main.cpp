@@ -8,6 +8,7 @@
 	#include <conio.h>
 	#define popen _popen
 	#define getch _getch
+	#define kbhit _kbhit
 
 	// At the time of writing, this define requires fairly recent windows version, so it's
 	// safest to just define it ourselves... Should be harmless!
@@ -49,8 +50,11 @@ void pause(bool show_message = true)
 	if (show_message) {
 		printf("\033[36m\nPress any key to continue...\033[0m");
 	}
+	while (kbhit()) {
+		getch();
+	}
 	int c = getch();
-	if (c == 0 || c == 0xE0) c = _getch();
+	if (c == 0 || c == 0xE0) c = getch();
 	if (c == 75) {
 		slide_reset = 1;
 		return;
@@ -203,7 +207,7 @@ int do_slides()
 	static coroutine_t s_co;
 	coroutine_t* co = &s_co;
 	static char slide_path[256];
-	static int slide_index = 18;
+	static int slide_index = 0;
 	static const char* buffer;
 	int keep_going = 1;
 
@@ -216,10 +220,10 @@ int do_slides()
 	free((void*)buffer);
 	buffer = read_file_to_memory_and_null_terminate(slide_path, NULL);
 	if (!buffer) keep_going = 0;
-	else goto flush_slide;
+	else goto flush_slide_label;
 	COROUTINE_EXIT(co);
 
-	COROUTINE_CASE(co, flush_slide);
+	COROUTINE_CASE(co, flush_slide_label);
 	while (1)
 	{
 		int keep_going = flush_slide(1, 5, buffer);

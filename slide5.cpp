@@ -78,3 +78,21 @@ Basically a huge amount of work for one enemy.
 .
 @pause
 Now do it for all of them...
+@pause
+
+There's also another problem.
+@pause
+
+   FRAME DELAY
+@pause
+
+The switch statement performs one "jump", so changing states requires
+the state machine function to be called again next frame, introducing
+@color red
+one frame lag, or one tick lag.
+@color normal
+@pause
+
+This is a non-problem for the coroutines shown later!
+
+:)
