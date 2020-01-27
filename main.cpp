@@ -117,8 +117,6 @@ void do_command()
 
 void parse(coroutine_t* co, char c)
 {
-	const char* color_code = NULL;
-
 	COROUTINE_START(co);
 
 	COROUTINE_CASE(co, is_at_symbol);
