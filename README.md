@@ -5,4 +5,4 @@ Build and run the executable with MSVC (Windows only). Press any key except the 
 
 g++ is expected to be installed to compile + run code live :)
 
-![screenshot 1](slides.gif?raw=true)
+![screenshot 1](slides/slides.gif?raw=true)
