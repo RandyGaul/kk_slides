@@ -5,4 +5,6 @@ Simply run `run.bat`, it should use bash or WIN32 console commands and run prett
 
 Thanks to @r-lyeh for doing a cross-platform port :D
 
+Youtube recording of the presentation - https://www.youtube.com/watch?v=MuCpdoIEpgA&t=344s
+
 ![screenshot 1](assets/slides.gif?raw=true)
